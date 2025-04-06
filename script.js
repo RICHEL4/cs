@@ -29,15 +29,16 @@ function register() {
         return;
     }
 
+    // Enregistrement sans connexion automatique
     storedUser[phone] = { 
         password: password, 
-        activationRequired: true // Indique que le code d'activation sera requis à la première connexion
+        activationRequired: true // Code d'activation requis à la première connexion
     };
     localStorage.setItem('userData', JSON.stringify(storedUser));
-    localStorage.setItem('loggedInUser', phone);
-    document.getElementById('loginContainer').style.display = 'none';
-    document.getElementById('mainContainer').style.display = 'block';
-    message.textContent = "Inscription réussie !";
+    message.textContent = "Inscription réussie ! Veuillez vous connecter.";
+    document.getElementById('phoneInput').value = '';
+    document.getElementById('passwordInput').value = '';
+    updateLoginForm();
 }
 
 function login() {
@@ -67,7 +68,7 @@ function login() {
             message.textContent = "Code d'activation incorrect.";
             return;
         }
-        // Une fois le code validé, on désactive la demande pour les prochaines connexions
+        // Désactiver la demande de code après validation
         storedUser[phone].activationRequired = false;
         localStorage.setItem('userData', JSON.stringify(storedUser));
     }

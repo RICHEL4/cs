@@ -10,8 +10,8 @@ function checkLoginStatus() {
 
 function registerOrLogin() {
     const phone = document.getElementById('phoneInput').value.trim();
-    const code = document.getElementById('activationCode').value.trim();
     const password = document.getElementById('passwordInput').value.trim();
+    const code = document.getElementById('activationCode').value.trim();
     const message = document.getElementById('loginMessage');
     const storedUser = JSON.parse(localStorage.getItem('userData')) || {};
 
@@ -21,21 +21,17 @@ function registerOrLogin() {
     }
 
     if (storedUser[phone]) {
-        // Utilisateur existant : connexion avec mot de passe
-        if (password === storedUser[phone].password) {
+        // Utilisateur existant : connexion avec mot de passe et code d'activation
+        if (password === storedUser[phone].password && code === ACTIVATION_CODE) {
             localStorage.setItem('loggedInUser', phone);
             document.getElementById('loginContainer').style.display = 'none';
             document.getElementById('mainContainer').style.display = 'block';
             message.textContent = "Connexion réussie !";
         } else {
-            message.textContent = "Mot de passe incorrect.";
+            message.textContent = "Mot de passe ou code d'activation incorrect.";
         }
     } else {
-        // Nouvel utilisateur : inscription
-        if (code !== ACTIVATION_CODE) {
-            message.textContent = "Code d'activation incorrect.";
-            return;
-        }
+        // Nouvel utilisateur : inscription avec mot de passe uniquement
         if (!password) {
             message.textContent = "Veuillez entrer un mot de passe.";
             return;
@@ -54,8 +50,8 @@ function logout() {
     document.getElementById('mainContainer').style.display = 'none';
     document.getElementById('loginContainer').style.display = 'block';
     document.getElementById('phoneInput').value = '';
-    document.getElementById('activationCode').value = '';
     document.getElementById('passwordInput').value = '';
+    document.getElementById('activationCode').value = '';
     document.getElementById('loginMessage').textContent = '';
     updateLoginForm();
 }
@@ -64,14 +60,11 @@ function updateLoginForm() {
     const phone = document.getElementById('phoneInput').value.trim();
     const storedUser = JSON.parse(localStorage.getItem('userData')) || {};
     const activationInput = document.getElementById('activationCode');
-    const passwordInput = document.getElementById('passwordInput');
 
     if (storedUser[phone]) {
-        activationInput.style.display = 'none';
-        passwordInput.style.display = 'block';
+        activationInput.style.display = 'block'; // Affiche le code d'activation pour les utilisateurs existants
     } else {
-        activationInput.style.display = 'block';
-        passwordInput.style.display = 'block';
+        activationInput.style.display = 'none'; // Cache le code d'activation pour les nouveaux utilisateurs
     }
 }
 

@@ -8,7 +8,39 @@ function checkLoginStatus() {
     }
 }
 
-function registerOrLogin() {
+function register() {
+    const phone = document.getElementById('phoneInput').value.trim();
+    const password = document.getElementById('passwordInput').value.trim();
+    const message = document.getElementById('loginMessage');
+    const storedUser = JSON.parse(localStorage.getItem('userData')) || {};
+
+    if (!phone.match(/^\+?[1-9]\d{1,14}$/)) {
+        message.textContent = "Numéro de téléphone invalide.";
+        return;
+    }
+
+    if (storedUser[phone]) {
+        message.textContent = "Ce numéro est déjà inscrit. Veuillez vous connecter.";
+        return;
+    }
+
+    if (!password) {
+        message.textContent = "Veuillez entrer un mot de passe.";
+        return;
+    }
+
+    storedUser[phone] = { 
+        password: password, 
+        activationRequired: true // Indique que le code d'activation sera requis à la première connexion
+    };
+    localStorage.setItem('userData', JSON.stringify(storedUser));
+    localStorage.setItem('loggedInUser', phone);
+    document.getElementById('loginContainer').style.display = 'none';
+    document.getElementById('mainContainer').style.display = 'block';
+    message.textContent = "Inscription réussie !";
+}
+
+function login() {
     const phone = document.getElementById('phoneInput').value.trim();
     const password = document.getElementById('passwordInput').value.trim();
     const code = document.getElementById('activationCode').value.trim();
@@ -20,29 +52,30 @@ function registerOrLogin() {
         return;
     }
 
-    if (storedUser[phone]) {
-        // Utilisateur existant : connexion avec mot de passe et code d'activation
-        if (password === storedUser[phone].password && code === ACTIVATION_CODE) {
-            localStorage.setItem('loggedInUser', phone);
-            document.getElementById('loginContainer').style.display = 'none';
-            document.getElementById('mainContainer').style.display = 'block';
-            message.textContent = "Connexion réussie !";
-        } else {
-            message.textContent = "Mot de passe ou code d'activation incorrect.";
-        }
-    } else {
-        // Nouvel utilisateur : inscription avec mot de passe uniquement
-        if (!password) {
-            message.textContent = "Veuillez entrer un mot de passe.";
+    if (!storedUser[phone]) {
+        message.textContent = "Ce numéro n'est pas inscrit. Veuillez vous inscrire.";
+        return;
+    }
+
+    if (password !== storedUser[phone].password) {
+        message.textContent = "Mot de passe incorrect.";
+        return;
+    }
+
+    if (storedUser[phone].activationRequired) {
+        if (code !== ACTIVATION_CODE) {
+            message.textContent = "Code d'activation incorrect.";
             return;
         }
-        storedUser[phone] = { password: password };
+        // Une fois le code validé, on désactive la demande pour les prochaines connexions
+        storedUser[phone].activationRequired = false;
         localStorage.setItem('userData', JSON.stringify(storedUser));
-        localStorage.setItem('loggedInUser', phone);
-        document.getElementById('loginContainer').style.display = 'none';
-        document.getElementById('mainContainer').style.display = 'block';
-        message.textContent = "Inscription réussie !";
     }
+
+    localStorage.setItem('loggedInUser', phone);
+    document.getElementById('loginContainer').style.display = 'none';
+    document.getElementById('mainContainer').style.display = 'block';
+    message.textContent = "Connexion réussie !";
 }
 
 function logout() {
@@ -61,10 +94,10 @@ function updateLoginForm() {
     const storedUser = JSON.parse(localStorage.getItem('userData')) || {};
     const activationInput = document.getElementById('activationCode');
 
-    if (storedUser[phone]) {
-        activationInput.style.display = 'block'; // Affiche le code d'activation pour les utilisateurs existants
+    if (storedUser[phone] && storedUser[phone].activationRequired) {
+        activationInput.style.display = 'block'; // Affiche le code d'activation si requis
     } else {
-        activationInput.style.display = 'none'; // Cache le code d'activation pour les nouveaux utilisateurs
+        activationInput.style.display = 'none'; // Cache sinon
     }
 }
 

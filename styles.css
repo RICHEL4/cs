@@ -119,7 +119,6 @@ button:hover {
     font-style: italic;
 }
 
-/* Responsive adjustments */
 @media (max-width: 600px) {
     h1 {
         font-size: 1.2em;
@@ -141,4 +140,4 @@ button:hover {
     .risk-level {
         font-size: 1.2em;
     }
-         }
+    }

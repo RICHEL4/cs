@@ -1,6 +1,5 @@
 const ACTIVATION_CODE = "TAFAIRAY1210";
 
-// Vérifie si l'utilisateur est déjà connecté
 function checkLoginStatus() {
     const loggedInUser = localStorage.getItem('loggedInUser');
     if (loggedInUser) {
@@ -9,32 +8,44 @@ function checkLoginStatus() {
     }
 }
 
-function register() {
+function registerOrLogin() {
     const phone = document.getElementById('phoneInput').value.trim();
     const code = document.getElementById('activationCode').value.trim();
+    const password = document.getElementById('passwordInput').value.trim();
     const message = document.getElementById('loginMessage');
+    const storedUser = JSON.parse(localStorage.getItem('userData')) || {};
 
     if (!phone.match(/^\+?[1-9]\d{1,14}$/)) {
         message.textContent = "Numéro de téléphone invalide.";
         return;
     }
 
-    const storedUser = localStorage.getItem('userPhone');
-    if (storedUser === phone) {
-        // Si l'utilisateur existe déjà, connexion directe
-        localStorage.setItem('loggedInUser', phone);
-        document.getElementById('loginContainer').style.display = 'none';
-        document.getElementById('mainContainer').style.display = 'block';
-        message.textContent = "Connexion réussie !";
-    } else if (code === ACTIVATION_CODE) {
-        // Nouvel utilisateur avec code valide
-        localStorage.setItem('userPhone', phone);
+    if (storedUser[phone]) {
+        // Utilisateur existant : connexion avec mot de passe
+        if (password === storedUser[phone].password) {
+            localStorage.setItem('loggedInUser', phone);
+            document.getElementById('loginContainer').style.display = 'none';
+            document.getElementById('mainContainer').style.display = 'block';
+            message.textContent = "Connexion réussie !";
+        } else {
+            message.textContent = "Mot de passe incorrect.";
+        }
+    } else {
+        // Nouvel utilisateur : inscription
+        if (code !== ACTIVATION_CODE) {
+            message.textContent = "Code d'activation incorrect.";
+            return;
+        }
+        if (!password) {
+            message.textContent = "Veuillez entrer un mot de passe.";
+            return;
+        }
+        storedUser[phone] = { password: password };
+        localStorage.setItem('userData', JSON.stringify(storedUser));
         localStorage.setItem('loggedInUser', phone);
         document.getElementById('loginContainer').style.display = 'none';
         document.getElementById('mainContainer').style.display = 'block';
         message.textContent = "Inscription réussie !";
-    } else {
-        message.textContent = "Code d'activation incorrect.";
     }
 }
 
@@ -44,7 +55,24 @@ function logout() {
     document.getElementById('loginContainer').style.display = 'block';
     document.getElementById('phoneInput').value = '';
     document.getElementById('activationCode').value = '';
+    document.getElementById('passwordInput').value = '';
     document.getElementById('loginMessage').textContent = '';
+    updateLoginForm();
+}
+
+function updateLoginForm() {
+    const phone = document.getElementById('phoneInput').value.trim();
+    const storedUser = JSON.parse(localStorage.getItem('userData')) || {};
+    const activationInput = document.getElementById('activationCode');
+    const passwordInput = document.getElementById('passwordInput');
+
+    if (storedUser[phone]) {
+        activationInput.style.display = 'none';
+        passwordInput.style.display = 'block';
+    } else {
+        activationInput.style.display = 'block';
+        passwordInput.style.display = 'block';
+    }
 }
 
 function calculate() {
@@ -101,5 +129,8 @@ function formatTime(date) {
     return `${hours}:${minutes}`;
 }
 
-// Vérifie l'état de connexion au chargement de la page
-window.onload = checkLoginStatus;
+// Événements
+window.onload = () => {
+    checkLoginStatus();
+    document.getElementById('phoneInput').addEventListener('input', updateLoginForm);
+};

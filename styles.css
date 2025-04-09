@@ -1,143 +1,169 @@
-body {
-    font-family: 'Courier New', monospace;
-    background-color: #000;
-    color: #ff0055;
-    text-align: center;
-    padding: 10px;
-    background-image: radial-gradient(#220022, #000000);
+/* Reset de base */
+* {
     margin: 0;
-    min-height: 100vh;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    color: #fff;
+    overflow: hidden;
+    position: relative;
     display: flex;
     justify-content: center;
     align-items: center;
+    height: 100vh;
+    background-color: #111;
+}
+
+.background-animation {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+    z-index: -1;
 }
 
 .container {
-    width: 90%;
-    max-width: 500px;
-    margin: 0 auto;
-    padding: 20px;
-    border: 2px solid #ff0055;
-    border-radius: 15px;
-    background-color: rgba(0, 0, 0, 0.7);
-    box-shadow: 0 0 20px #ff0055;
+    background: rgba(0, 0, 0, 0.8);
+    padding: 2.5rem;
+    border-radius: 20px;
+    backdrop-filter: blur(15px);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.6);
+    text-align: center;
+    max-width: 450px;
+    width: 100%;
+    z-index: 1;
+    border: 1px solid rgba(255, 0, 0, 0.3);
 }
 
 h1 {
-    color: #ff0055;
-    text-shadow: 0 0 10px #ff0055;
+    font-size: 2.5rem;
+    margin-bottom: 1.5rem;
+    color: #ff4444;
+    font-weight: 600;
+    text-transform: uppercase;
     letter-spacing: 2px;
-    margin-bottom: 20px;
-    font-size: 1.5em;
 }
 
-.input-group {
-    margin: 20px 0;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
+#blocked-message h2 {
+    color: #ff4444;
+    margin-bottom: 1rem;
 }
 
-input {
-    padding: 10px;
-    width: 100%;
-    max-width: 200px;
-    background-color: #111;
-    color: #ff0055;
-    border: 1px solid #ff0055;
-    border-radius: 5px;
-    font-size: 16px;
-    text-align: center;
-    margin: 0 auto;
+#blocked-message p {
+    margin-bottom: 1rem;
+    line-height: 1.6;
 }
 
 button {
-    padding: 10px 20px;
-    background-color: #330011;
-    color: #ff0055;
-    border: 1px solid #ff0055;
-    border-radius: 5px;
+    width: 100%;
+    padding: 0.75rem;
+    font-size: 1rem;
+    background-color: #ff4444;
+    color: #fff;
+    border: none;
+    border-radius: 10px;
     cursor: pointer;
-    margin: 10px;
-    font-weight: bold;
-    transition: all 0.3s;
-    font-size: 14px;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-top: 1rem;
 }
 
 button:hover {
-    background-color: #550022;
-    box-shadow: 0 0 10px #ff0055;
+    background-color: #cc0000;
+    transform: scale(1.05);
 }
 
-.result {
-    margin-top: 30px;
-    padding: 15px;
-    border: 1px dashed #ff0055;
-    border-radius: 10px;
+button:active {
+    transform: scale(0.95);
+}/* Reset de base */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 
-.time {
-    font-size: 2em;
-    margin: 15px 0;
-    color: #ff0055;
-    text-shadow: 0 0 10px #ff0055;
-    letter-spacing: 3px;
+body {
+    font-family: 'Poppins', sans-serif;
+    color: #fff;
+    overflow: hidden;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #111;
 }
 
-.multiplier {
-    font-size: 1.8em;
-    font-weight: bold;
-    margin: 15px 0;
-    animation: pulse 2s infinite;
+.background-animation {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+    z-index: -1;
 }
 
-.risk {
-    font-size: 1em;
-    margin-top: 20px;
-    color: #ff3355;
+.container {
+    background: rgba(0, 0, 0, 0.8);
+    padding: 2.5rem;
+    border-radius: 20px;
+    backdrop-filter: blur(15px);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.6);
+    text-align: center;
+    max-width: 450px;
+    width: 100%;
+    z-index: 1;
+    border: 1px solid rgba(255, 0, 0, 0.3);
+}
+
+h1 {
+    font-size: 2.5rem;
+    margin-bottom: 1.5rem;
+    color: #ff4444;
+    font-weight: 600;
     text-transform: uppercase;
+    letter-spacing: 2px;
 }
 
-.risk-level {
-    font-size: 1.5em;
-    color: #ff0000;
-    font-weight: bold;
-    margin: 10px 0;
-    text-shadow: 0 0 10px #ff0000;
+#blocked-message h2 {
+    color: #ff4444;
+    margin-bottom: 1rem;
 }
 
-@keyframes pulse {
-    0% { opacity: 0.7; }
-    50% { opacity: 1; }
-    100% { opacity: 0.7; }
+#blocked-message p {
+    margin-bottom: 1rem;
+    line-height: 1.6;
 }
 
-.warning {
-    font-size: 0.8em;
-    color: #ff5555;
-    margin-top: 20px;
-    font-style: italic;
+button {
+    width: 100%;
+    padding: 0.75rem;
+    font-size: 1rem;
+    background-color: #ff4444;
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-top: 1rem;
 }
 
-@media (max-width: 600px) {
-    h1 {
-        font-size: 1.2em;
-    }
-    input {
-        width: 80%;
-        font-size: 14px;
-    }
-    button {
-        font-size: 12px;
-        padding: 8px 15px;
-    }
-    .time {
-        font-size: 1.5em;
-    }
-    .multiplier {
-        font-size: 1.3em;
-    }
-    .risk-level {
-        font-size: 1.2em;
-    }
+button:hover {
+    background-color: #cc0000;
+    transform: scale(1.05);
+}
+
+button:active {
+    transform: scale(0.95);
     }
